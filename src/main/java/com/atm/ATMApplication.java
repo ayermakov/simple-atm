@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 public class ATMApplication {
     public static void main(String[] args) {
         Terminal terminal = new Terminal();
-        terminal.print("Welcome! Simple session-based ATM. Set of your accounts to play around:");        
+        terminal.print("Welcome! Simple session-based ATM. Set of your accounts to play around:\n");        
         
         Account firstAccount = new Account("44445555", "6666", 233);
         Account secondAccount = new Account("11112222", "3333", 478);
@@ -14,7 +14,6 @@ public class ATMApplication {
         ATM atm = new ATM(bank, terminal, new int[]{2, 1, 1, 1, 1, 1, 1, 1});
 
         terminal.println("\n\tAttention! All data will be lost when you exit the program.\n");
-        atm.printAvailableBanknotes();
 
         String turnOff = "";
         do {
@@ -41,14 +40,15 @@ public class ATMApplication {
 
             terminal.println("Choose action:\n\t[1] Show my account balance.\n\t[2] Withdraw money.\n\t[3] Put money into account.\n\t[4] Transfer.\n\t[5] Logout.");
             
-            int actionChoice = 0;
             do {
+            	int actionChoice = 0;
                 try {
                     String temp = terminal.readString("Which action to do next (1-5): ");
                     actionChoice = Integer.parseInt(temp);
 
                     switch(actionChoice) {
                         case 1:
+                        	atm.showBalance();
                             break; 
                         case 2:
                             break;
@@ -57,7 +57,8 @@ public class ATMApplication {
                         case 4: 
                             break;
                         case 5:
-                            terminal.println("Your session is going to close ..."); 
+                        	atm.logout();
+                            terminal.println("Your session is closed ..."); 
                             break;
                         default:
                             System.err.println("Wrong choice ... try again from 1 to 5.");
@@ -67,7 +68,7 @@ public class ATMApplication {
                 } catch(Exception ex) {
                     System.err.println("Unknown exception occured. Please, try again ...");
                 }
-            } while(actionChoice != 5);
+            } while(atm.hasActiveSession());
 
             try {
                 turnOff = terminal.readString("Do you want to leave the program (yes|y)? ");

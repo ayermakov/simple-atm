@@ -25,6 +25,10 @@ public class ATM {
             for(int i = 0; i < notesQuantity.length; ++i) {
                 banknotes.put(noteTypes[i], notesQuantity[i]);
             }
+
+            printAvailableBanknotes();
+        } else {
+        	terminal.println("No notes inside. Check configuration.");
         }
     }
 
@@ -35,6 +39,18 @@ public class ATM {
         }
 
         return false;
+    }
+
+    public void logout() {
+    	currentAccountNumber = null;
+    }
+
+    public boolean hasActiveSession() {
+    	if(currentAccountNumber == null) {
+    		return false;
+    	} else {
+    		return true;
+    	}
     }
 
     public boolean insertBanknote(int note) {
@@ -62,5 +78,11 @@ public class ATM {
             terminal.print(note + " => " + banknotes.get(note) + "; ");
         }
         terminal.println();
+    }
+
+    public void showBalance() {
+    	if(currentAccountNumber != null) {
+    		terminal.println(bank.getAccountInfo());
+    	}
     }
 }
