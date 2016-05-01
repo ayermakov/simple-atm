@@ -14,29 +14,36 @@ public class ATMApplication {
     }
 
     private static String readString() throws Exception {
-    	if(scanner.hasNext()) {
-        	return scanner.nextLine();
-    	} else {
-    		throw new Exception("Unknown IO exception.");
-    	}
+        String line = "";
+        
+        do {
+            if(scanner.hasNextLine()) {
+                line = scanner.nextLine();
+                line = line.trim();
+            } else {
+                throw new Exception("Unknown IO exception.");
+            }
+        } while(line.equals(""));
+
+        return line;
     }
 
     private static void println(String s) {
-	    System.out.println(s);
-	}
+        System.out.println(s);
+    }
 
     private static void print(String s) {
-	    System.out.print(s);
-	}
+        System.out.print(s);
+    }
 
     public static void main(String[] args) {
-		console = System.console();
-		if (console != null) {
-			scanner = new Scanner(console.reader());
-		} else {
-			System.err.println("No console.");
+        console = System.console();
+        if (console != null) {
+            scanner = new Scanner(console.reader());
+        } else {
+            System.err.println("No console.");
             System.exit(1);
-		}
+        }
 
         print("Welcome! Simple session-based ATM. Set of your accounts to play around:");        
         
@@ -51,18 +58,18 @@ public class ATMApplication {
             String number = "", pin = "";
             boolean accepted;
             do {    
-            	accepted = false;
+                accepted = false;
                 try {
                     number = readString("Enter card number: ");
                     pin = readString("Enter pin: ");
 
                     accepted = bank.login(number, pin);
 
-	                if(accepted) {
-	                	println("Success!");
-	                } else{
-	                	println("Wrong card number or pin! Try again ...");
-	                }
+                    if(accepted) {
+                        println("Success!");
+                    } else{
+                        println("Wrong card number or pin! Try again ...");
+                    }
                 } catch(Exception ex) {
                     ex.printStackTrace();
                     System.err.println("Input/output exception raised, try again ...");
@@ -73,42 +80,38 @@ public class ATMApplication {
             
             int actionChoice = 0;
             do {
-            	try {
-		            String temp = readString("Which action to do next (1-5): ");
-		            actionChoice = Integer.parseInt(temp);
+                try {
+                    String temp = readString("Which action to do next (1-5): ");
+                    actionChoice = Integer.parseInt(temp);
 
-		            switch(actionChoice) {
-		            	case 1:
-		            		System.out.println("first choice");
-		            		break; 
-		            	case 2:
-		            		System.out.println("second");
-		            		break;
-		            	case 3:
-		            		System.out.println("third"); 
-		            		break;
-		            	case 4:
-		            		System.out.println("fourth"); 
-		            		break;
-		            	case 5:
-		            		System.out.println("Your session is going to close ..."); 
-		            		break;
-		            	default:
-		            		System.err.println("Wrong choice ... try again from 1 to 5.");
-		            }
-		        } catch(InputMismatchException ime) {
-		        	System.err.println("Input mismatch exception handle. Try again ...");
-		        } catch(Exception ex) {
-		        	System.err.println("Unknown exception occured. Please, try again ...");
-		        }
-	        } while(actionChoice != 5);
+                    switch(actionChoice) {
+                        case 1:
+                            break; 
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4: 
+                            break;
+                        case 5:
+                            System.out.println("Your session is going to close ..."); 
+                            break;
+                        default:
+                            System.err.println("Wrong choice ... try again from 1 to 5.");
+                    }
+                } catch(InputMismatchException ime) {
+                    System.err.println("Input mismatch exception handle. Try again ...");
+                } catch(Exception ex) {
+                    System.err.println("Unknown exception occured. Please, try again ...");
+                }
+            } while(actionChoice != 5);
 
-	        try {
-	        	turnOff = readString("Do you want to leave the program (yes|y)? ");
-	        } catch(Exception ex) {
-	        	System.err.println("Something went wrong ... quiting.");
-	        	System.exit(2);
-	        }
+            try {
+                turnOff = readString("Do you want to leave the program (yes|y)? ");
+            } catch(Exception ex) {
+                System.err.println("Something went wrong ... quiting.");
+                System.exit(2);
+            }
         } while(!turnOff.equals("y") && !turnOff.equals("yes"));
     
         scanner.close();        

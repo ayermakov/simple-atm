@@ -1,8 +1,13 @@
 package com.atm;
 
+import java.util.ArrayList;
+
 public class Bank {
-    public Bank(Account... accounts) {
-        for(Account account : accounts) {
+	private ArrayList<Account> accounts = new ArrayList<Account>();
+
+    public Bank(Account... newAccounts) {
+        for(Account account : newAccounts) {
+        	accounts.add(account);
             System.out.format("\n\tCard number %s, pin %s, %d UAH.", account.getNumber(), account.getPin(), account.getBalance());
         }
     }
@@ -12,6 +17,11 @@ public class Bank {
     }
 
     public boolean login(String cardNumber, String pinCode) {
-        return true;
+        for(Account account : accounts) {
+        	if(account.getNumber().equals(cardNumber) && account.getPin().equals(pinCode)) {
+        		return true;
+        	}
+        }
+        return false;
     }
 }
