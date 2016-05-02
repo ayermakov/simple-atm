@@ -41,28 +41,28 @@ public class ATMApplication {
             terminal.println("Choose action:\n\t[1] Show my account balance.\n\t[2] Withdraw money.\n\t[3] Put money into account.\n\t[4] Transfer.\n\t[5] Logout.");
             
             do {
-            	int actionChoice = 0;
+                int actionChoice = 0;
                 try {
                     String temp = terminal.readString("Which action to do next (1-5): ");
                     actionChoice = Integer.parseInt(temp);
 
                     switch(actionChoice) {
                         case 1:
-                        	atm.showBalance();
+                            atm.showBalance();
                             break; 
                         case 2:
-                        	String toWithdraw = terminal.readString("Amount of money you want to withdraw: ");
-                        	atm.withdraw(Integer.parseInt(toWithdraw));
+                            String toWithdraw = terminal.readString("Amount of money you want to withdraw: ");
+                            atm.withdraw(Integer.parseInt(toWithdraw));
                             break;
                         case 3:
-                        	String toPut = terminal.readString("Amount of money you want to put: ");
-                        	atm.putIntoAccount(Integer.parseInt(toPut));
+                            String toPut = terminal.readString("Amount of money you want to put: ");
+                            atm.putIntoAccount(Integer.parseInt(toPut));
                             break;
                         case 4: 
-                        	atm.transfer();
+                            atm.transfer();
                             break;
                         case 5:
-                        	atm.logout();
+                            atm.logout();
                             terminal.println("Your session is closed ..."); 
                             break;
                         default:

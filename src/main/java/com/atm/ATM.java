@@ -29,7 +29,7 @@ public class ATM {
 
             printAvailableBanknotes();
         } else {
-        	terminal.println("No notes inside. Check configuration.");
+            terminal.println("No notes inside. Check configuration.");
         }
     }
 
@@ -43,40 +43,40 @@ public class ATM {
     }
 
     public void logout() {
-    	currentAccountNumber = null;
+        currentAccountNumber = null;
     }
 
     public boolean hasActiveSession() {
-    	if(currentAccountNumber == null) {
-    		return false;
-    	} else {
-    		return true;
-    	}
+        if(currentAccountNumber == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void putIntoAccount(int amount) {
-    	int total = 0;
-    	while(total < amount) {
-    		int number = 0;
-	    	try {	
-	    		String banknote = terminal.readString("\tInsert banknote: ");
-	    		number = Integer.parseInt(banknote);
-	    	} catch(Exception ex) {
-	    		terminal.println("Wrong input, try again.");
-	    		continue;
-	    	} 
+        int total = 0;
+        while(total < amount) {
+            int number = 0;
+            try {    
+                String banknote = terminal.readString("\tInsert banknote: ");
+                number = Integer.parseInt(banknote);
+            } catch(Exception ex) {
+                terminal.println("Wrong input, try again.");
+                continue;
+            } 
 
             if(validateBanknote(number)) {
-            	if(bank.putIntoAccount(number)) {
-	            	total += number;	
-	            	insertBanknote(number);
-            	} else {
-            		terminal.println("Bank has not accepted the banknote. Please, try again.");
-            	}
+                if(bank.putIntoAccount(number)) {
+                    total += number;    
+                    insertBanknote(number);
+                } else {
+                    terminal.println("Bank has not accepted the banknote. Please, try again.");
+                }
             }
-    	}
+        }
 
-    	terminal.println("Inserted " + total + " UAH.");
+        terminal.println("Inserted " + total + " UAH.");
     }
 
     private boolean validateBanknote(int banknote) {
@@ -103,85 +103,85 @@ public class ATM {
     }
 
     public void showBalance() {
-    	if(currentAccountNumber != null) {
-    		terminal.println(bank.getAccountInfo());
-    	}
+        if(currentAccountNumber != null) {
+            terminal.println(bank.getAccountInfo());
+        }
     }
 
     public void withdraw(int amount) {
-    	if(bank.isWithdrawalPossible(amount)) {
-    		int[] chosenNotes = chooseBanknotesToWithdraw(amount);
-    		if(chosenNotes.length == 0) {
-    			terminal.println("Not enough notes to complete your request. Please, try later.");
-    			return;
-    		}
+        if(bank.isWithdrawalPossible(amount)) {
+            int[] chosenNotes = chooseBanknotesToWithdraw(amount);
+            if(chosenNotes.length == 0) {
+                terminal.println("Not enough notes to complete your request. Please, try later.");
+                return;
+            }
 
-    		if(bank.performWithdrawal(amount)) {
-				for(int i = 0; i < noteTypes.length; ++i) {
-		            banknotes.put(noteTypes[i], banknotes.get(noteTypes[i]) - chosenNotes[i]);
-		        }
-		        terminal.print("Success! ");
-		        showBalance();
-		        printAvailableBanknotes();
-    		} else {
-    			terminal.println("Bank failed to perform this transaction. Please, try again next time.");
-    		}
-    	} else {
-    		terminal.println("Bank denied this withdrawal.");
-    	}
+            if(bank.performWithdrawal(amount)) {
+                for(int i = 0; i < noteTypes.length; ++i) {
+                    banknotes.put(noteTypes[i], banknotes.get(noteTypes[i]) - chosenNotes[i]);
+                }
+                terminal.print("Success! ");
+                showBalance();
+                printAvailableBanknotes();
+            } else {
+                terminal.println("Bank failed to perform this transaction. Please, try again next time.");
+            }
+        } else {
+            terminal.println("Bank denied this withdrawal.");
+        }
     }
 
     private int[] chooseBanknotesToWithdraw(int requestedMoney) {
-    	int[] returningNotes = new int[noteTypes.length];
-    	Arrays.fill(returningNotes, 0);
+        int[] returningNotes = new int[noteTypes.length];
+        Arrays.fill(returningNotes, 0);
 
-    	int total = 0;
-    	int expectedAmount = requestedMoney;
-    	for(int i = 0; i < noteTypes.length; ++i) {
-    		int type = noteTypes[i];
+        int total = 0;
+        int expectedAmount = requestedMoney;
+        for(int i = 0; i < noteTypes.length; ++i) {
+            int type = noteTypes[i];
 
-    		if(requestedMoney < type || banknotes.get(type) == 0) {
-    			continue;
-    		}
-    		
-			int ableToWithdraw = (requestedMoney / type);
-			if(banknotes.get(type) >= ableToWithdraw) {
-				returningNotes[i] += ableToWithdraw;
-				total += ableToWithdraw * type;
-				requestedMoney -= ableToWithdraw * type;
-			} else {
-				returningNotes[i] += banknotes.get(type);
-				total += banknotes.get(type) * type;
-				requestedMoney -= banknotes.get(type) * type;
-			}
-    		
-    		if(total == expectedAmount) {
-    			return returningNotes;
-    		}
-    	}
+            if(requestedMoney < type || banknotes.get(type) == 0) {
+                continue;
+            }
+            
+            int ableToWithdraw = (requestedMoney / type);
+            if(banknotes.get(type) >= ableToWithdraw) {
+                returningNotes[i] += ableToWithdraw;
+                total += ableToWithdraw * type;
+                requestedMoney -= ableToWithdraw * type;
+            } else {
+                returningNotes[i] += banknotes.get(type);
+                total += banknotes.get(type) * type;
+                requestedMoney -= banknotes.get(type) * type;
+            }
+            
+            if(total == expectedAmount) {
+                return returningNotes;
+            }
+        }
 
-    	return new int[0];
+        return new int[0];
     }
 
     public void transfer() {
-    	if(currentAccountNumber != null) {
-	    	while(true) {
-	    		try {
-		    		String input = terminal.readString("What amount of money you want to transfer: ");
-		    		int amount = Integer.parseInt(input);
-		    		input = terminal.readString("Enter a destination account number: ");
+        if(currentAccountNumber != null) {
+            while(true) {
+                try {
+                    String input = terminal.readString("What amount of money you want to transfer: ");
+                    int amount = Integer.parseInt(input);
+                    input = terminal.readString("Enter a destination account number: ");
 
-		    		if(bank.transfer(amount, input)) {
-		    			terminal.println("Success!");
-		    		} else {
-		    			terminal.println("Bank denied this transfer.");
-		    		}
+                    if(bank.transfer(amount, input)) {
+                        terminal.println("Success!");
+                    } else {
+                        terminal.println("Bank denied this transfer.");
+                    }
 
-		    		return;
-		    	} catch(Exception ex) {
-		    		terminal.println("Wrong input, try again.");
-		    	} 
-		    }
-    	}
+                    return;
+                } catch(Exception ex) {
+                    terminal.println("Wrong input, try again.");
+                } 
+            }
+        }
     }
 }
