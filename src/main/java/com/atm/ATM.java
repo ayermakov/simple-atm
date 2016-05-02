@@ -1,6 +1,7 @@
 package com.atm;
 
 import java.util.Hashtable;
+import java.util.Arrays;
 
 public class ATM {
     public static final int[] noteTypes = {200, 100, 50, 20, 10, 5, 2, 1};
@@ -84,5 +85,62 @@ public class ATM {
     	if(currentAccountNumber != null) {
     		terminal.println(bank.getAccountInfo());
     	}
+    }
+
+    public void withdraw(int amount) {
+    	if(bank.isWithdrawalPossible(amount)) {
+    		int[] chosenNotes = chooseBanknotesToWithdraw(amount);
+    		if(chosenNotes.length == 0) {
+    			terminal.println("Not enough notes to complete your request. Please, try later.");
+    			return;
+    		}
+
+    		if(bank.performWithdrawal(amount)) {
+				for(int i = 0; i < noteTypes.length; ++i) {
+		            banknotes.put(noteTypes[i], banknotes.get(noteTypes[i]) - chosenNotes[i]);
+		        }
+		        terminal.print("Success! ");
+		        showBalance();
+		        printAvailableBanknotes();
+    		} else {
+    			terminal.println("Bank failed to perform this transaction. Please, try again next time.");
+    		}
+    	} else {
+    		terminal.println("Bank denied this withdrawal.");
+    	}
+    }
+
+    private int[] chooseBanknotesToWithdraw(int requestedMoney) {
+    	int[] returningNotes = new int[noteTypes.length];
+    	Arrays.fill(returningNotes, 0);
+
+    	int total = 0;
+    	int expectedAmount = requestedMoney;
+    	for(int i = 0; i < noteTypes.length; ++i) {
+    		int type = noteTypes[i];
+
+    		if(requestedMoney < type || banknotes.get(type) == 0) {
+    			continue;
+    		}
+    		
+			int ableToWithdraw = (requestedMoney / type);
+			if(banknotes.get(type) >= ableToWithdraw) {
+				returningNotes[i] += ableToWithdraw;
+				total += ableToWithdraw * type;
+				requestedMoney -= ableToWithdraw * type;
+			} else {
+				returningNotes[i] += banknotes.get(type);
+				total += banknotes.get(type) * type;
+				requestedMoney -= banknotes.get(type) * type;
+			}
+    		
+    		// terminal.println("Requested array: " + Arrays.toString(returningNotes));
+    		// terminal.println("Total: " + Integer.toString(total));
+    		if(total == expectedAmount) {
+    			return returningNotes;
+    		}
+    	}
+
+    	return new int[0];
     }
 }

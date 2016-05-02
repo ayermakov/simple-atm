@@ -51,6 +51,8 @@ public class ATMApplication {
                         	atm.showBalance();
                             break; 
                         case 2:
+                        	String toWithdraw = terminal.readString("Amount of money you want to withdraw: ");
+                        	atm.withdraw(Integer.parseInt(toWithdraw));
                             break;
                         case 3:
                             break;

@@ -20,17 +20,67 @@ public class Bank {
                 return true;
             }
         }
+
         return false;
     }
 
     public String getAccountInfo() {
 	    if(currAccountNumber != null) {
-	    	for(Account account : accounts) {
-	    		if(account.getNumber().equals(currAccountNumber)) {
-	    			return "Account number " + currAccountNumber + ", your balance is " + account.getBalance() + " UAH.";
-	    		}
-	    	}
+	    	Account foundAccount = findAccount(currAccountNumber);
+	    	if(foundAccount != null) {
+	    		return "Account number " + foundAccount.getNumber() + ", your balance is " + foundAccount.getBalance() + " UAH.";
+    		}
     	}
+
     	return "No data about the client.";
     }
+
+    private Account findAccount(String thatAccountNumber) {
+		for(Account account : accounts) {
+    		if(account.getNumber().equals(thatAccountNumber)) {
+    			return account;
+    		}
+    	}
+
+    	return null;
+    }
+
+    public boolean performWithdrawal(int amount) {
+    	if(currAccountNumber != null) {
+    		Account foundAccount = findAccount(currAccountNumber);
+    		if(isWithdrawalPossible(foundAccount, amount)) {
+    			foundAccount.reduceBalance(amount);
+    			return true;
+    		}
+    	}
+
+    	return false;
+    }
+
+    public boolean isWithdrawalPossible(int amount) {
+    	Account foundAccount = findAccount(currAccountNumber);
+	    if(isWithdrawalPossible(foundAccount, amount)) {
+			return true;
+    	}
+    	
+    	return false;
+    }
+
+    private boolean isWithdrawalPossible(Account someAccount, int amount) {
+		if(someAccount != null && someAccount.getBalance() >= amount && validCashAmount(amount)) {
+			return true;
+		}
+
+    	return false;
+    }
+
+    private boolean validCashAmount(int amount) {
+        if(amount >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // (Integer.MAX_VALUE - amount < foundAccount.getBalance())
 }

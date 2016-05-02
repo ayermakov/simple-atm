@@ -10,23 +10,9 @@ public class Account {
     }
 
     public Account(String a_number, String a_pin, int a_balance) {
-        // Card number and pin may also be validated first.
         number = a_number;
         pin = a_pin;
-
-        if(validCashAmount(a_balance)) {
-            balance = a_balance;
-        } else {
-            balance = 0;
-        }
-    }
-
-    private boolean validCashAmount(int amount) {
-        if(amount >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        balance = a_balance;
     }
 
     public String getNumber() {
@@ -41,27 +27,15 @@ public class Account {
         return balance;
     }
 
-    public void addBalance(int amount) throws AccountOperationException {
+    public void addBalance(int amount) {
         if(Integer.MAX_VALUE - amount < balance) {
             
-        }
-
-        if(validCashAmount(amount)) {
-            throw new AccountOperationException("Not valid amount: " + amount + ".");    
         }
 
         balance += amount;
     }
 
-    public void reduceBalance(int amount) throws AccountOperationException {
-        if(balance - amount < 0) {
-            throw new AccountOperationException("Too little balance.");    
-        }
-
-        if(validCashAmount(amount)) {
-            throw new AccountOperationException("Not valid amount: " + amount + ".");    
-        }
-
+    public void reduceBalance(int amount) {
         balance -= amount;
     }
 
