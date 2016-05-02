@@ -34,10 +34,4 @@ public class Account {
     public void reduceBalance(int amount) {
         balance -= amount;
     }
-
-    public class AccountOperationException extends Exception {
-        public AccountOperationException(String message) {
-            super(message);
-        }
-    }
 }

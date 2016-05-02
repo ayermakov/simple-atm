@@ -85,7 +85,7 @@ public class Bank {
     public boolean putIntoAccount(int amount) {
     	if(currAccountNumber != null && validCashAmount(amount)) {
     		Account foundAccount = findAccount(currAccountNumber);
-    		if(Integer.MAX_VALUE - foundAccount.getBalance() > amount ) {
+    		if(Integer.MAX_VALUE - foundAccount.getBalance() > amount) {
     			foundAccount.addBalance(amount);
     			return true;
     		}
@@ -95,10 +95,14 @@ public class Bank {
     }
 
     public boolean transfer(int amount, String targetAccountNumber) {
-    	if(currAccountNumber != null && targetAccountNumber != null) {
+    	if(currAccountNumber != null && targetAccountNumber != null && validCashAmount(amount)) {
     		Account origin = findAccount(currAccountNumber);
     		Account target = findAccount(targetAccountNumber);
-
+    		if(origin != target && isWithdrawalPossible(origin, amount) && (Integer.MAX_VALUE - target.getBalance() > amount)) {
+    			origin.reduceBalance(amount);
+    			target.addBalance(amount);
+    			return true;
+    		}
     	}
 
     	return false;

@@ -59,6 +59,7 @@ public class ATMApplication {
                         	atm.putIntoAccount(Integer.parseInt(toPut));
                             break;
                         case 4: 
+                        	atm.transfer();
                             break;
                         case 5:
                         	atm.logout();

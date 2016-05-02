@@ -155,13 +155,33 @@ public class ATM {
 				requestedMoney -= banknotes.get(type) * type;
 			}
     		
-    		// terminal.println("Requested array: " + Arrays.toString(returningNotes));
-    		// terminal.println("Total: " + Integer.toString(total));
     		if(total == expectedAmount) {
     			return returningNotes;
     		}
     	}
 
     	return new int[0];
+    }
+
+    public void transfer() {
+    	if(currentAccountNumber != null) {
+	    	while(true) {
+	    		try {
+		    		String input = terminal.readString("What amount of money you want to transfer: ");
+		    		int amount = Integer.parseInt(input);
+		    		input = terminal.readString("Enter a destination account number: ");
+
+		    		if(bank.transfer(amount, input)) {
+		    			terminal.println("Success!");
+		    		} else {
+		    			terminal.println("Bank denied this transfer.");
+		    		}
+
+		    		return;
+		    	} catch(Exception ex) {
+		    		terminal.println("Wrong input, try again.");
+		    	} 
+		    }
+    	}
     }
 }
