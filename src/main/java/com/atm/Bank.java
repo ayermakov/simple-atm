@@ -62,7 +62,7 @@ public class Bank {
 	    if(isWithdrawalPossible(foundAccount, amount)) {
 			return true;
     	}
-    	
+
     	return false;
     }
 
@@ -82,5 +82,25 @@ public class Bank {
         }
     }
 
-    // (Integer.MAX_VALUE - amount < foundAccount.getBalance())
+    public boolean putIntoAccount(int amount) {
+    	if(currAccountNumber != null && validCashAmount(amount)) {
+    		Account foundAccount = findAccount(currAccountNumber);
+    		if(Integer.MAX_VALUE - foundAccount.getBalance() > amount ) {
+    			foundAccount.addBalance(amount);
+    			return true;
+    		}
+    	}
+
+    	return false;
+    }
+
+    public boolean transfer(int amount, String targetAccountNumber) {
+    	if(currAccountNumber != null && targetAccountNumber != null) {
+    		Account origin = findAccount(currAccountNumber);
+    		Account target = findAccount(targetAccountNumber);
+
+    	}
+
+    	return false;
+    }
 }

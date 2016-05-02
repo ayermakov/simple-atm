@@ -55,6 +55,8 @@ public class ATMApplication {
                         	atm.withdraw(Integer.parseInt(toWithdraw));
                             break;
                         case 3:
+                        	String toPut = terminal.readString("Amount of money you want to put: ");
+                        	atm.putIntoAccount(Integer.parseInt(toPut));
                             break;
                         case 4: 
                             break;

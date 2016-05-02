@@ -28,10 +28,6 @@ public class Account {
     }
 
     public void addBalance(int amount) {
-        if(Integer.MAX_VALUE - amount < balance) {
-            
-        }
-
         balance += amount;
     }
 

@@ -54,23 +54,44 @@ public class ATM {
     	}
     }
 
-    public boolean insertBanknote(int note) {
-        if(validateBanknote(note)) {
-            banknotes.put(note, banknotes.get(note) + 1); 
-            return true;
-        }
-        terminal.println("Unknown banknote. Please enter correct note ...");
-        return false;
+    public void putIntoAccount(int amount) {
+    	int total = 0;
+    	while(total < amount) {
+    		int number = 0;
+	    	try {	
+	    		String banknote = terminal.readString("\tInsert banknote: ");
+	    		number = Integer.parseInt(banknote);
+	    	} catch(Exception ex) {
+	    		terminal.println("Wrong input, try again.");
+	    		continue;
+	    	} 
+
+            if(validateBanknote(number)) {
+            	if(bank.putIntoAccount(number)) {
+	            	total += number;	
+	            	insertBanknote(number);
+            	} else {
+            		terminal.println("Bank has not accepted the banknote. Please, try again.");
+            	}
+            }
+    	}
+
+    	terminal.println("Inserted " + total + " UAH.");
     }
 
-    public boolean validateBanknote(int banknote) {
+    private boolean validateBanknote(int banknote) {
         for(int note : noteTypes) {
             if(note == banknote) {
                 return true;
             }
         }
 
+        terminal.println("Unknown banknote. Please insert correct one ...");
         return false;
+    }
+
+    private void insertBanknote(int note) {
+        banknotes.put(note, banknotes.get(note) + 1); 
     }
 
     public void printAvailableBanknotes() {
